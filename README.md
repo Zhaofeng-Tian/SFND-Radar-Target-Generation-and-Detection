@@ -1,6 +1,5 @@
 # SFND-Radar-Target-Generation-and-Detection
-# SFND Radar Target Generation and Detection
-## [Rubric](https://review.udacity.com/#!/rubrics/2548/view) Points
+
 ---
 #### 1. FMCW Waveform Design
 Using the given system requirements, design a FMCW waveform. Find its Bandwidth (B), chirp time (Tchirp) and slope of the chirp.
