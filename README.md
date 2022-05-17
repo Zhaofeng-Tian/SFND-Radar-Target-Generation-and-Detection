@@ -109,6 +109,7 @@ signal_fft = signal_fft(1 : Nr/2-1);
 
 #### 4. 2D CFAR
 Implement the 2D CFAR process on the output of 2D FFT operation, i.e the Range Doppler Map.
+<img src="./images/CFAR.png" width = "50%" height = "50%" alt="CFAR" align=center />
 ```Matlab
 % *%TODO* :
 %Select the number of Training Cells in both the dimensions.
