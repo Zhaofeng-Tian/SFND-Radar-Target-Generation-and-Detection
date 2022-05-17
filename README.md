@@ -86,7 +86,7 @@ end
 #### 3. Range FFT (1st FFT)
 
 Implement the Range FFT on the Beat or Mixed Signal and plot the result.
-![fft](https://github.com/Zhaofeng-Tian/SFND-Radar-Target-Generation-and-Detection/tree/main/images/fft.png)
+ <img src="./images/fft.png" width = "100%" height = "100%" alt="FFT" align=center />
 ```Matlab
  % *%TODO* :
 %reshape the vector into Nr*Nd array. Nr and Nd here would also define the size of
