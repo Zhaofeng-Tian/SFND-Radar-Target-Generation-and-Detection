@@ -6,23 +6,26 @@
 Using the given system requirements, design a FMCW waveform. Find its Bandwidth (B), chirp time (Tchirp) and slope of the chirp.
 
 ```Matlab
-%% Radar Specifications 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Frequency of operation = 77GHz
-% Max Range = 200m
-range_max = 200
-% Range Resolution = 1 m
-delta_r = 1
-% Max Velocity = 100 m/s
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% User Defined Range and Velocity of target
+% *%TODO* :
+% define the target's initial position and velocity. Note : Velocity
+% remains contant
+c = 3*10^8;
+range = 110;
+vel = -20;
+max_range = 200;
+range_res = 1;
+max_vel = 100; 
 
-c = 3*10^8
-pos = 110
-vel = 20
-B = c/(2*delta_r)
-Tchirp = 5.5*(range_max*2/c)
-slope = B/Tchirp
-disp(slope)
+%% FMCW Waveform Generation
+
+% *%TODO* :
+%Design the FMCW waveform by giving the specs of each of its parameters.
+% Calculate the Bandwidth (B), Chirp Time (Tchirp) and Slope (slope) of the FMCW
+% chirp using the requirements above.
+B = c / (2*range_res);
+Tchirp = 5.5 * 2 * (max_range/c);  
+slope = B/Tchirp;
 ```
 
 #### 2. Simulation Loop
