@@ -87,6 +87,7 @@ end
 
 Implement the Range FFT on the Beat or Mixed Signal and plot the result.
  <img src="./images/fft.png" width = "50%" height = "50%" alt="FFT" align=center />
+ <img src="./images/fft2.png" width = "50%" height = "50%" alt="FFT2" align=center />
 ```Matlab
  % *%TODO* :
 %reshape the vector into Nr*Nd array. Nr and Nd here would also define the size of
