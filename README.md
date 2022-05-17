@@ -88,17 +88,22 @@ end
 Implement the Range FFT on the Beat or Mixed Signal and plot the result.
 
 ```Matlab
-signal = reshape(Mix,[Nr, Nd])
-signal_fft = fft(signal, Nr)/Nr;
+ % *%TODO* :
+%reshape the vector into Nr*Nd array. Nr and Nd here would also define the size of
+%Range and Doppler FFT respectively.
+Mix = reshape(Mix, [Nr, Nd]);
+ % *%TODO* :
+%run the FFT on the beat signal along the range bins dimension (Nr) and
+%normalize.
+signal_fft = fft(Mix, Nr);
+ % *%TODO* :
+% Take the absolute value of FFT output
 signal_fft = abs(signal_fft);
-
-signal_fft  = signal_fft(1:Nr/2)   
-disp(length(signal_fft))
-
-figure ('Name','Range from First FFT')
-subplot(2,1,1)
-plot(signal_fft) 
-axis ([0 200 0 0.5]);
+signal_fft = signal_fft ./ max(signal_fft);
+ % *%TODO* :
+% Output of FFT is double sided signal, but we are interested in only one side of the spectrum.
+% Hence we throw out half of the samples.
+signal_fft = signal_fft(1 : Nr/2-1);
 ```
 
 #### 4. 2D CFAR
