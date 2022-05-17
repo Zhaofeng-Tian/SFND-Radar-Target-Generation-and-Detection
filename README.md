@@ -122,69 +122,63 @@ offset=1.35;
 Slide the cell under test across the complete matrix. Make sure the CUT has margin for Training and Guard cells from the edges.
 
 ```Matlab
-for i = 1:(Nr/2-(2*Gr+2*Tr+1))
-    for j = 1:(Nd-(2*Gd+2*Td+1))
-        ...
-    end
-end
-```
-
-For every iteration sum the signal level within all the training cells. To sum convert the value from logarithmic to linear using db2pow function.
-
-```Matlab
+% *%TODO* :
+%Select the number of Training Cells in both the dimensions.
+n_train_cells = 10;
+n_train_bands = 8;
+% *%TODO* :
+%Select the number of Guard Cells in both dimensions around the Cell under 
+%test (CUT) for accurate estimation
+n_guard_cells = 4;
+n_guard_bands = 4;
+% *%TODO* :
+% offset the threshold by SNR value in dB
+offset = 1.37;
+% *%TODO* :
+%Create a vector to store noise_level for each iteration on training cells
 noise_level = zeros(1,1);
-for x = i:(i+2*Tr+2*Gr) 
-    noise_level = [noise_level, db2pow(RDM(x,(j:(j+ 2*Td+2*Gd))))];
-end    
-sum_cell = sum(noise_level);
-noise_level = zeros(1,1);
-for x = (i+Tr):(i+Tr+2*Gr) 
-    noise_level = [noise_level, db2pow(RDM(x,(j+Td):(j+Td+2*Gd)))];
-end    
-sum_guard = sum(noise_level);
-sum_train = sum_cell - sum_guard;
-```
 
-Average thesummed values for all of the training cells used. After averaging convert it back to logarithmic using pow2db.
-Further add the offset to it to determine the threshold.
 
-```Matlab
-threshold = pow2db(sum_train/Tcell)*offset;
-```
+% *%TODO* :
+%design a loop such that it slides the CUT across range doppler map by
+%giving margins at the edges for Training and Guard Cells.
+%For every iteration sum the signal level within all the training
+%cells. To sum convert the value from logarithmic to linear using db2pow
+%function. Average the summed values for all of the training
+%cells used. After averaging convert it back to logarithimic using pow2db.
+%Further add the offset to it to determine the threshold. Next, compare the
+%signal under CUT with this threshold. If the CUT level > threshold assign
+%it a value of 1, else equate it to 0.
 
-Next, compare the signal under CUT against this threshold.
-If the CUT level > threshold assign it a value of 1, else equate it to 0.
 
-```Matlab
-signal = RDM(i+Tr+Gr, j+Td+Gd);
-if (signal < threshold)
-    signal = 0;
-else
-    signal = 1;
-end    
-CFAR(i+Tr+Gr, j+Td+Gd) = signal;
-```
+   % Use RDM[x,y] as the matrix from the output of 2D FFT for implementing
+   % CFAR
+RDM = RDM / max(RDM(:));
+for row0 = n_train_cells + n_guard_cells + 1 : (Nr/2) - (n_train_cells + n_guard_cells)
+  for col0 = n_train_bands + n_guard_bands + 1 : (Nd) - (n_train_bands + n_guard_bands)
+    %Create a vector to store noise_level for each iteration on training cells
+    noise_level = zeros(1, 1);
 
-To keep the map size same as it was before CFAR, equate all the non-thresholded cells to 0.
-
-```Matlab
-for i = 1:(Nr/2)
-    for j = 1:Nd
-       if (i > (Tr+Gr))& (i < (Nr/2-(Tr+Gr))) & (j > (Td+Gd)) & (j < (Nd-(Td+Gd)))
-           continue
-       end
-       CFAR(i,j) = 0;
+    for row1 = row0 - (n_train_cells + n_guard_cells) : row0 + (n_train_cells + n_guard_cells)
+      for col1 = col0 - (n_train_bands + n_guard_bands) : col0 + (n_train_bands + n_guard_bands)
+        if (abs(row0 - row1) > n_guard_cells || abs(col0 - col1) > n_guard_bands)
+          noise_level = noise_level + db2pow(RDM(row1, col1));
+        end
+      end
     end
+
+    % Calculate threshold from noise average then add the offset
+    thresh = pow2db(noise_level / (2 * (n_train_bands + n_guard_bands + 1) * 2 * (n_train_cells + n_guard_cells + 1) - (n_guard_cells * n_guard_bands) - 1));
+    thresh = thresh + offset;
+
+    CUT = RDM(row1,col1);
+
+    if (CUT < thresh)
+      RDM(row0, col0) = 0;
+    else
+      RDM(row0, col0) = 1;
+    end
+
+  end
 end
-```
-Selection of Training, Guard cells and offset.
-
-Training, Guard cells and offset are selected by increasing and decreasing to match the image shared in walkthrough.
-
-Tr = 8;
-Td = 4;
-Gr = 8;
-Gd = 4;
-offset=1.35;
-
-Result
+'''
