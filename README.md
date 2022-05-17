@@ -108,19 +108,6 @@ signal_fft = signal_fft(1 : Nr/2-1);
 
 #### 4. 2D CFAR
 Implement the 2D CFAR process on the output of 2D FFT operation, i.e the Range Doppler Map.
-
-Determine the number of Training cells for each dimension. Similarly, pick the number of guard cells.
-
-```Matlab
-Tr = 8;
-Td = 4;
-Gr = 8;
-Gd = 4;
-offset=1.35;
-```
-
-Slide the cell under test across the complete matrix. Make sure the CUT has margin for Training and Guard cells from the edges.
-
 ```Matlab
 % *%TODO* :
 %Select the number of Training Cells in both the dimensions.
